@@ -14,7 +14,7 @@
 
       <fragment
           android:id="@+id/photoPickerFragment"
-          android:name="com.yongbeam.y_photopicker.util.photopicker.fragment.PhotoPickerFragment"
+          android:name="com.jinu.imagepickerlib.fragment.PhotoPickerFragment"
           android:layout_width="match_parent"
           android:layout_height="match_parent" />
 

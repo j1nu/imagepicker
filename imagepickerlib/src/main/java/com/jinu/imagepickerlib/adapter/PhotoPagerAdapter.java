@@ -45,7 +45,7 @@ public class PhotoPagerAdapter extends PagerAdapter {
     if (path.startsWith("http")) {
       uri = Uri.parse(path);
     } else {
-      uri = FileProvider.getUriForFile(mContext, "com.yongbeam.y_photopicker.fileprovider", new File(path));
+      uri = FileProvider.getUriForFile(mContext, "com.jinu.imagepickerlib.fileprovider", new File(path));
     }
 
     Glide.with(mContext)

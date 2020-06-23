@@ -14,7 +14,7 @@
 
         <fragment
             android:id="@+id/photoPagerFragment"
-            android:name="com.yongbeam.y_photopicker.util.photopicker.fragment.ImagePagerFragment"
+            android:name="com.jinu.imagepickerlib.fragment.ImagePagerFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

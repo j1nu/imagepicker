@@ -70,7 +70,7 @@ public class ImageCaptureManager {
 
       File photoFile = createImageFile();
       if (photoFile != null) {
-        Uri uri = FileProvider.getUriForFile(mContext, "com.yongbeam.y_photopicker.fileprovider", photoFile);
+        Uri uri = FileProvider.getUriForFile(mContext, "com.jinu.imagepickerlib.fileprovider", photoFile);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
       }
     }

@@ -86,7 +86,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
         photo = photos.get(position);
       }
 
-      Uri uri = FileProvider.getUriForFile(mContext, "com.yongbeam.y_photopicker.fileprovider", new File(photo.getPath()));
+      Uri uri = FileProvider.getUriForFile(mContext, "com.jinu.imagepickerlib.fileprovider", new File(photo.getPath()));
       Glide.with(mContext)
               .load(uri)
               .apply(new RequestOptions()

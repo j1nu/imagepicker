@@ -1,5 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jinu.imagepickerlib">
 
-    /
+    <application>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.jinu.imagepickerlib.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+    </application>
+
 </manifest>
