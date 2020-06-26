@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="pager_bg">#ffffff</color>
-  <color name="style_color_primary">#3F3F3F</color>
+  <color name="style_color_primary">#ff7f00</color>
   <color name="style_color_primary_dark">#484848</color>
+<!--  <color name="style_color_primary">#3F3F3F</color>-->
+<!--  <color name="style_color_primary_dark">#484848</color>-->
   <color name="style_color_accent">#484848</color>
   <color name="image_loading_color">#4f696969</color>
   <color name="image_loading_error_color">#4f696969</color>

@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
+<!--  안드로이드 29 권한 오류 -->
+<!--    https://darkstart.tistory.com/66-->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
