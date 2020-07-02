@@ -4,14 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
   <ImageView
-      android:padding="1dip"
       android:layout_gravity="center"
       android:id="@+id/iv_photo"
       android:scaleType="centerCrop"
       android:layout_width="match_parent"
-      android:background="@drawable/photo_bg"
+      android:foreground="@drawable/photo_bg"
       android:layout_height="match_parent"
-      android:adjustViewBounds="true" />
+      android:adjustViewBounds="true"/>
 
   <ImageView
       android:layout_margin="5dip"

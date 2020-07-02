@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.ColorSpace;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +36,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -97,13 +105,28 @@ public class PhotoPickerFragment extends Fragment {
 
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_photos);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity)getActivity()).maxGrideItemCount, OrientationHelper.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), ((PhotoPickerActivity)getActivity()).maxGrideItemCount);
+//        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity)getActivity()).maxGrideItemCount, OrientationHelper.VERTICAL);
+//        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(photoGridAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new ItemDecoration(3, ((PhotoPickerActivity)getActivity()).maxGrideItemCount));
 
-        final Button btSwitchDirectory = (Button) rootView.findViewById(R.id.button);
+        Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        ((PhotoPickerActivity) getActivity()).setSupportActionBar(mToolbar);
+
+        ActionBar actionBar = ((PhotoPickerActivity) getActivity()).getSupportActionBar();
+
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            actionBar.setElevation(25);
+        }
+
+        final Button btSwitchDirectory = (Button) rootView.findViewById(R.id.btn_toolbar);
 
         final ListPopupWindow listPopupWindow = new ListPopupWindow(getActivity());
         listPopupWindow.setWidth(ListPopupWindow.MATCH_PARENT);
@@ -200,6 +223,44 @@ public class PhotoPickerFragment extends Fragment {
         return photoGridAdapter;
     }
 
+    public class ItemDecoration extends RecyclerView.ItemDecoration {
+        private int dp;
+        private int spanCount;
+
+        public ItemDecoration(int dp, int spanCount) {
+            this.dp = dp;
+            this.spanCount = spanCount;
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+
+            GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) view.getLayoutParams();
+            int spanIndex = lp.getSpanIndex();
+
+            if (spanIndex == 0) {
+                outRect.right = dpToPx(2);
+            }
+            else if (spanIndex == 1) {
+                outRect.left = dpToPx(1);
+                outRect.right = dpToPx(1);
+            }
+            else if (spanIndex == 2) {
+                outRect.left = dpToPx(2);
+            }
+
+            outRect.bottom = dpToPx(dp);
+        }
+
+        private int dpToPx(int dp) {
+            return (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    (float) dp,
+                    getResources().getDisplayMetrics()
+            );
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

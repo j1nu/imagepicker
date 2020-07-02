@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
-    app:theme="?attr/actionBarTheme"
-    app:popupTheme="?attr/actionBarPopupTheme"
-    android:background="@color/style_color_primary"
-    android:id="@+id/toolbar"
-    />
+    android:minHeight="?attr/actionBarSize">
+
+    <Button
+        android:id="@+id/btn_toolbar"
+        style="@style/Widget.AppCompat.ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/y_photopicker_all_image" />
+
+</androidx.appcompat.widget.Toolbar>

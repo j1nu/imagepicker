@@ -1,7 +1,9 @@
 package com.jinu.imagepickerlib.adapter;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +76,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
   @Override
   public void onBindViewHolder(final PhotoViewHolder holder, int position) {
+
+    System.out.println("bind " + position);
 
     if (getItemViewType(position) == ITEM_TYPE_PHOTO) {
 
@@ -161,7 +165,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
-      ivPhoto   = (ImageView) itemView.findViewById(R.id.iv_photo);
+      ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
       vSelected = itemView.findViewById(R.id.v_selected);
     }
   }

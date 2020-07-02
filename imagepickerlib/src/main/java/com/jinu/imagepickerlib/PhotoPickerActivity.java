@@ -127,18 +127,18 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     setShowGif(showGif);
 
-    Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    mToolbar.setTitle(R.string.y_photopicker_image_select_title);
-    setSupportActionBar(mToolbar);
-
-    ActionBar actionBar = getSupportActionBar();
-
-    assert actionBar != null;
-    actionBar.setDisplayHomeAsUpEnabled(true);
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      actionBar.setElevation(25);
-    }
+//    Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//    mToolbar.setTitle(R.string.y_photopicker_image_select_title);
+//    setSupportActionBar(mToolbar);
+//
+//    ActionBar actionBar = getSupportActionBar();
+//
+//    assert actionBar != null;
+//    actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//      actionBar.setElevation(25);
+//    }
 
     maxCount = getIntent().getIntExtra(EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
 
