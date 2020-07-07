@@ -25,8 +25,14 @@ public class MediaStoreHelper {
     public final static int INDEX_ALL_PHOTOS = 0;
 
     public static void getPhotoDirs(FragmentActivity activity, Bundle args, PhotosResultCallback resultCallback) {
-        activity.getSupportLoaderManager()
-                .initLoader(0, args, new PhotoDirLoaderCallbacks(activity, resultCallback));
+        if (activity.getSupportLoaderManager().getLoader(0) == null) {
+            activity.getSupportLoaderManager()
+                    .initLoader(0, args, new PhotoDirLoaderCallbacks(activity, resultCallback));
+        }
+        else {
+            activity.getSupportLoaderManager()
+                    .restartLoader(0, args, new PhotoDirLoaderCallbacks(activity, resultCallback));
+        }
     }
 
     static class PhotoDirLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -52,6 +58,8 @@ public class MediaStoreHelper {
             PhotoDirectory photoDirectoryAll = new PhotoDirectory();
             photoDirectoryAll.setName(context.getString(R.string.y_photopicker_all_image));
             photoDirectoryAll.setId("ALL");
+
+            System.out.println(data);
 
             while (data.moveToNext()) {
 

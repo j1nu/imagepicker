@@ -16,12 +16,14 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
 
   protected List<PhotoDirectory> photoDirectories;
   protected List<Photo> selectedPhotos;
+  protected List<Integer> selectedPhotoPositions;
   public int currentDirectoryIndex = 0;
 
 
   public SelectableAdapter() {
     photoDirectories = new ArrayList<>();
     selectedPhotos = new ArrayList<>();
+    selectedPhotoPositions = new ArrayList<>();
   }
 
 
@@ -43,12 +45,18 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
    * @param photo Photo of the item to toggle the selection status for
    */
   @Override
-  public void toggleSelection(Photo photo) {
+  public boolean toggleSelection(Photo photo, int position) {
     if (selectedPhotos.contains(photo)) {
       selectedPhotos.remove(photo);
-    } else {
-      selectedPhotos.add(photo);
+      selectedPhotoPositions.remove(Integer.valueOf(position));
+
+      return false;
     }
+
+    selectedPhotos.add(photo);
+    selectedPhotoPositions.add(position);
+
+    return true;
   }
 
 
@@ -58,6 +66,7 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
   @Override
   public void clearSelection() {
     selectedPhotos.clear();
+    selectedPhotoPositions.clear();
   }
 
 
@@ -94,6 +103,10 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
   @Override
   public List<Photo> getSelectedPhotos() {
     return selectedPhotos;
+  }
+
+  public int getSelectedPhotoIndex(Photo photo) {
+    return selectedPhotos.indexOf(photo);
   }
 
 }

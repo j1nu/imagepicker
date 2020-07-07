@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -19,6 +20,7 @@ import com.jinu.imagepickerlib.event.OnPhotoClickListener;
 import com.jinu.imagepickerlib.utils.MediaStoreHelper;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,10 +77,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   }
 
   @Override
-  public void onBindViewHolder(final PhotoViewHolder holder, int position) {
-
-    System.out.println("bind " + position);
-
+  public void onBindViewHolder(final PhotoViewHolder holder, final int position) {
     if (getItemViewType(position) == ITEM_TYPE_PHOTO) {
 
       List<Photo> photos = getCurrentPhotos();
@@ -102,6 +101,17 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
       final boolean isChecked = isSelected(photo);
 
+      if (isChecked) {
+        holder.vSelected.setAlpha(1);
+        holder.tvSelected.setVisibility(View.VISIBLE);
+        holder.tvSelected.setText(String.valueOf(getSelectedPhotoIndex(photo) + 1));
+      }
+      else {
+        holder.vSelected.setAlpha((float) 0.2);
+        holder.tvSelected.setVisibility(View.GONE);
+        holder.tvSelected.setText("");
+      }
+
       holder.vSelected.setSelected(isChecked);
       holder.ivPhoto.setSelected(isChecked);
 
@@ -115,7 +125,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
               isEnable = onItemCheckListener.OnItemCheck(holder.getAdapterPosition(), photo, isChecked, getSelectedPhotos().size());
             }
             if (isEnable) {
-              toggleSelection(photo);
+              toggleSelection(photo, position);
               notifyItemChanged(holder.getAdapterPosition());
             }
           }else{
@@ -136,8 +146,14 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             isEnable = onItemCheckListener.OnItemCheck(holder.getAdapterPosition(), photo, isChecked, getSelectedPhotos().size());
           }
           if (isEnable) {
-            toggleSelection(photo);
-            notifyItemChanged(holder.getAdapterPosition());
+            final int selectPhotoIndex = getSelectedPhotoIndex(photo);
+            final List<Integer> positionList = new ArrayList<>(selectedPhotoPositions);
+            final boolean toggleResult = toggleSelection(photo, position);
+
+            if (toggleResult)
+              notifyItemChanged(holder.getAdapterPosition());
+            else
+              notifySelectedItems(selectPhotoIndex, positionList);
           }
         }
       });
@@ -152,6 +168,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   public int getItemCount() {
     int photosCount =
         photoDirectories.size() == 0 ? 0 : getCurrentPhotos().size();
+
     if (showCamera()) {
       return photosCount + 1;
     }
@@ -162,11 +179,13 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   public static class PhotoViewHolder extends RecyclerView.ViewHolder {
     private ImageView ivPhoto;
     private View vSelected;
+    private TextView tvSelected;
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
       ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
       vSelected = itemView.findViewById(R.id.v_selected);
+      tvSelected = itemView.findViewById(R.id.tv_selected);
     }
   }
 
@@ -204,5 +223,11 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
   public boolean showCamera() {
     return (hasCamera && currentDirectoryIndex == MediaStoreHelper.INDEX_ALL_PHOTOS);
+  }
+
+  public void notifySelectedItems(int selectedIndex, List<Integer> positionList) {
+    for (int index = selectedIndex; index <= positionList.size() - 1; index++) {
+      notifyItemChanged(positionList.get(index));
+    }
   }
 }

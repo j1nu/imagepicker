@@ -6,16 +6,16 @@ import android.widget.RelativeLayout;
 
 public class SquareItemLayout extends RelativeLayout {
   public SquareItemLayout(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
-  }
+      super(context, attrs, defStyle);
+    }
 
   public SquareItemLayout(Context context, AttributeSet attrs) {
-    super(context, attrs);
-  }
+      super(context, attrs);
+    }
 
   public SquareItemLayout(Context context) {
-    super(context);
-  }
+      super(context);
+    }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

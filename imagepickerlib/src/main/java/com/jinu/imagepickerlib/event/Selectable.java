@@ -22,7 +22,7 @@ public interface Selectable {
    *
    * @param photo Photo of the item to toggle the selection status for
    */
-  void toggleSelection(Photo photo);
+  boolean toggleSelection(Photo photo, int posotion);
 
   /**
    * Clear the selection status for all items

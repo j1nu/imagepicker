@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,9 +40,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import static android.app.Activity.RESULT_OK;
 import static com.jinu.imagepickerlib.PhotoPickerActivity.EXTRA_SHOW_GIF;
@@ -95,7 +90,6 @@ public class PhotoPickerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         setRetainInstance(true);
 
         final View rootView = inflater.inflate(R.layout.util_fragment_photo_picker, container, false);
@@ -110,7 +104,8 @@ public class PhotoPickerFragment extends Fragment {
 //        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(photoGridAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemAnimator(null);
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new ItemDecoration(3, ((PhotoPickerActivity)getActivity()).maxGrideItemCount));
 
         Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
@@ -133,9 +128,9 @@ public class PhotoPickerFragment extends Fragment {
         listPopupWindow.setAnchorView(btSwitchDirectory);
         listPopupWindow.setAdapter(listAdapter);
         listPopupWindow.setModal(true);
-        listPopupWindow.setDropDownGravity(Gravity.BOTTOM);
-        listPopupWindow.setAnimationStyle(R.style.Animation_AppCompat_DropDownUp);
-        listPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_popup_menu));
+//        listPopupWindow.setDropDownGravity(Gravity.BOTTOM);
+//        listPopupWindow.setAnimationStyle(R.style.Animation_AppCompat_DropDownUp);
+//        listPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_popup_menu));
 
         listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -264,15 +259,35 @@ public class PhotoPickerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        captureManager.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
+        captureManager.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Bundle mediaStoreArgs = new Bundle();
+        if (getActivity() instanceof PhotoPickerActivity) {
+            mediaStoreArgs.putBoolean(EXTRA_SHOW_GIF, ((PhotoPickerActivity) getActivity()).isShowGif());
+        }
+
+        MediaStoreHelper.getPhotoDirs(getActivity(), mediaStoreArgs, new MediaStoreHelper.PhotosResultCallback() {
+            @Override
+            public void onResultCallback(List<PhotoDirectory> dirs) {
+                directories.clear();
+                directories.addAll(dirs);
+                photoGridAdapter.notifyDataSetChanged();
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
-        captureManager.onRestoreInstanceState(savedInstanceState);
         super.onViewStateRestored(savedInstanceState);
+        captureManager.onRestoreInstanceState(savedInstanceState);
     }
 
     public ArrayList<String> getSelectedPhotoPaths() {

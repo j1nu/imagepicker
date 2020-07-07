@@ -13,13 +13,26 @@
       android:adjustViewBounds="true"/>
 
   <ImageView
-      android:layout_margin="5dip"
-      android:layout_alignParentTop="true"
-      android:layout_alignParentRight="true"
-      android:clickable="true"
-      android:padding="5dip"
       android:id="@+id/v_selected"
-      android:src="@drawable/photo_checkbox_bg"
-      android:layout_width="30dp"
-      android:layout_height="30dp" />
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:background="@drawable/photo_count_bg"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_margin="8dp"
+      android:alpha="0.2" />
+
+  <TextView
+      android:id="@+id/tv_selected"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:textSize="14sp"
+      android:textColor="@color/color_ffffff"
+      android:layout_margin="8dp"
+      android:gravity="center"/>
+
 </com.jinu.imagepickerlib.widget.SquareItemLayout>
