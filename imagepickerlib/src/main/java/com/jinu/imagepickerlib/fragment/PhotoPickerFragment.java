@@ -21,6 +21,7 @@ import android.widget.ListPopupWindow;
 import com.jinu.imagepickerlib.PhotoPickerActivity;
 import com.jinu.imagepickerlib.R;
 import com.jinu.imagepickerlib.adapter.PhotoGridAdapter;
+import com.jinu.imagepickerlib.adapter.PhotoSelectedAdapter;
 import com.jinu.imagepickerlib.adapter.PopupDirectoryListAdapter;
 import com.jinu.imagepickerlib.entity.Photo;
 import com.jinu.imagepickerlib.entity.PhotoDirectory;
@@ -40,6 +41,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static android.app.Activity.RESULT_OK;
@@ -52,6 +54,8 @@ public class PhotoPickerFragment extends Fragment {
     private Activity mActivity = null;
 
     private ImageCaptureManager captureManager;
+    private RecyclerView selectedRecyclerView;
+    private PhotoSelectedAdapter selectedPhotoAdapter;
     private PhotoGridAdapter photoGridAdapter;
 
     private PopupDirectoryListAdapter listAdapter;
@@ -94,9 +98,30 @@ public class PhotoPickerFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.util_fragment_photo_picker, container, false);
 
-        photoGridAdapter = new PhotoGridAdapter(getActivity(), directories , ((PhotoPickerActivity)getActivity()).isCheckBoxOnly);
+        selectedPhotoAdapter = new PhotoSelectedAdapter(getActivity(), this);
+        photoGridAdapter = new PhotoGridAdapter(getActivity(), directories , ((PhotoPickerActivity)getActivity()).isCheckBoxOnly, selectedPhotoAdapter);
         listAdapter = new PopupDirectoryListAdapter(getActivity(), directories);
 
+        selectedRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_selected_photos);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
+        selectedRecyclerView.setLayoutManager(linearLayoutManager);
+        selectedPhotoAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+
+                selectedRecyclerView.scrollToPosition(selectedPhotoAdapter.getItemCount() - 1);
+            }
+
+//            @Override
+//            public void onItemRangeRemoved(int positionStart, int itemCount) {
+//                super.onItemRangeRemoved(positionStart, itemCount);
+//
+//                System.out.println("removed " + positionStart);
+//                selectedRecyclerView.scrollToPosition(positionStart);
+//            }
+        });
+        selectedRecyclerView.setAdapter(selectedPhotoAdapter);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_photos);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), ((PhotoPickerActivity)getActivity()).maxGrideItemCount);
@@ -315,5 +340,10 @@ public class PhotoPickerFragment extends Fragment {
             e.printStackTrace();
         }
         return FileName;
+    }
+
+    public void scrollToPosition(int position) {
+        if (position != 0)
+            selectedRecyclerView.scrollToPosition(position - 1);
     }
 }
