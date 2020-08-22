@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.jinu.imagepickerlib.widget.TouchImageView
+    <com.ortiz.touchview.TouchImageView
         android:id="@+id/iv_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
